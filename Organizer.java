@@ -33,18 +33,17 @@ public class Organizer {
 
 			choice = in.nextInt();
 			switch (choice) {
-			
+
 			case 1:
 				// This if/else statement controls the amount of teams we can
 				// create.
 				if (mMasterPlayerList.size() >= 6 && mMasterPlayerList.size() >= mTeamList.size()) {
-					mTeamSet.add(buildNewTeam()); 
-				} 
-				else {
+					mTeamSet.add(buildNewTeam());
+				} else {
 					System.out.println("Sorry, not enough players to form another Team.");
 				}
 				break;
-				
+
 			case 2:
 				int counter = 1;
 				for (Player player : mMasterPlayerList) {
@@ -52,23 +51,22 @@ public class Organizer {
 					counter++;
 				}
 				break;
-				
+
 			case 3:
 				addPlayerToTeam();
 				break;
-				
+
 			case 4:
 				removePlayers();
 				break;
-				
+
 			case 5: // TODO: Team Reports.
 					// To Include: teams grouped by height, and comparison of
 					// experienced vs non experienced players.
 				Scanner input = new Scanner(System.in);
 				int selection = 0;
 				do {
-					System.out.println("\n"
-							+ "Select the report type out would like to view:\n"
+					System.out.println("\n" + "Select the report type out would like to view:\n"
 							+ "1: Players by height(shortest to tallest)\n" + "2: Players grouped by experience.\n"
 							+ "3: Exit Reports");
 					selection = in.nextInt();
@@ -78,31 +76,31 @@ public class Organizer {
 					 * PRODUCE THE CERTAIN REPORT THE ORGANIZER WANTS TO RUN
 					 */
 					switch (selection) {
-					
+
 					case 1:
 						getByHeight();
 						break;
-						
+
 					case 2:
 						isExperienced();
 						break;
 					case 3:
 						break;
-						
+
 					default:
-						System.out.println("Selection Error. Try another menu option.");	
+						System.out.println("Selection Error. Try another menu option.");
 					}
-					
+
 				} while (selection != 3);
 				break;
-				
+
 			case 6:
 				getRoster();
 				break;
-				
+
 			case 9:
 				break;
-				
+
 			default:
 				System.out.println("it no worky...give it another go.");
 			}
@@ -116,12 +114,12 @@ public class Organizer {
 	public Team buildNewTeam() {
 		Scanner in = new Scanner(System.in);
 		System.out.println("What is the team name?");
-		
+
 		String teamName = in.nextLine();
 		System.out.println("What is the coach's name?");
-		
+
 		String coachName = in.nextLine();
-		
+
 		return new Team(coachName, teamName);
 	}
 
@@ -132,21 +130,21 @@ public class Organizer {
 	private List<Team> getTeams() {
 		Team[] teams = Teams.load();
 		List<Team> teamList = new ArrayList<Team>(mTeamSet);
-		
+
 		for (Team team : teams) {
 			teamList.add(team);
 		}
-		
+
 		Collections.sort(teamList);
-		
+
 		int counter = 0;
 		for (Team team : teamList) {
 			counter++;
 			System.out.println(counter + ": " + team.getTeam());
 		}
-		
+
 		mTeamList = teamList;
-		
+
 		return teamList;
 	}
 
@@ -156,13 +154,13 @@ public class Organizer {
 	 */
 	private static List<Player> createMasterPlayerList() {
 		Player[] newPlayer = Players.load();
-		
+
 		for (Player player : newPlayer) {
 			mMasterPlayerList.add(player);
 		}
-		
+
 		Collections.sort(mMasterPlayerList);
-		
+
 		return mMasterPlayerList;
 	}
 
@@ -183,17 +181,17 @@ public class Organizer {
 	 * This method adds players to a selected team
 	 */
 	public void addPlayerToTeam() {
-		Scanner in = new Scanner(System.in);	
+		Scanner in = new Scanner(System.in);
 		List<Player> teamPlayerList = new ArrayList<Player>();
 		Team team = teamSelector();
 		List<Player> tempList = new ArrayList<Player>(mMasterPlayerList);
-		
+
 		int selector = 0;
 		do {
 			System.out.println("1: Select player to add to team: ");
 			System.out.println("2: Done editing team:");
 			selector = in.nextInt();
-			
+
 			switch (selector) {
 			case 1:
 				int counter = 0;
@@ -201,22 +199,22 @@ public class Organizer {
 					counter++;
 					System.out.println(counter + ":" + player.getPlayerStats());
 				}
-				
+
 				int userChoice = in.nextInt();
-				
+
 				Player selectedPlayer = tempList.get(userChoice - 1);
-				
+
 				teamPlayerList.add(selectedPlayer);
-				
+
 				tempList.remove(userChoice - 1);
-				
+
 				mMasterPlayerList.remove(userChoice - 1);
-				
+
 				break;
-				
+
 			case 2:
 				break;
-				
+
 			}
 		} while (selector != 2);
 		mTeamRoster.put(team, teamPlayerList);
@@ -225,20 +223,20 @@ public class Organizer {
 	/*
 	 * This method will allow players to be removed from team and placed back in
 	 * the master player list.
-	*/
+	 */
 	private void removePlayers() {
 		Scanner in = new Scanner(System.in);
 		Scanner input = new Scanner(System.in);
 		Team team = teamSelector();
 		List<Player> playerList = mTeamRoster.get(team);
-		
+
 		int choice = 0;
 		do {
 			System.out.println("1: Select player to remove.");
 			System.out.println("2: Done removing player(s)");
-			
+
 			choice = in.nextInt();
-			
+
 			switch (choice) {
 			case 1:
 				int counter = 1;
@@ -247,18 +245,18 @@ public class Organizer {
 					counter++;
 				}
 				System.out.println("Select the player number you want to remove from team (press 'x' to exit): ");
-				
+
 				int playerChoice = input.nextInt();
-				
+
 				Player selectedPlayer = playerList.get(playerChoice - 1);
-				
+
 				playerList.remove(playerChoice - 1);
-				
+
 				mMasterPlayerList.add(selectedPlayer);
-				
+
 				Collections.sort(mMasterPlayerList);
 				break;
-				
+
 			case 2:
 				break;
 			}
@@ -271,49 +269,62 @@ public class Organizer {
 			System.out.println("Team : " + entry.getKey() + " \nPlayers : " + entry.getValue());
 		}
 	}
-	
-	//This method sorts the players on a selected team by height
+
+	// This method sorts the players on a selected team by height
 	public void getByHeight() {
 		Team team = teamSelector();
 		List<Player> playerList = mTeamRoster.get(team);
 		
-		for (int i = 0; i < playerList.size()-1; i++) {
-			Player min = playerList.get(i);
-			
-			for(int j = i+1; j < playerList.size()-1; j++) {
-				
-				if(playerList.get(j).getHeightInInches() < playerList.get(i).getHeightInInches()) {
-					
-					min = playerList.get(j);
+		// selection sort for loop that goes through the list and 
+		// swaps the elements with smaller elements (based on height) 
+		// until the list is sorted.
+		int smallHeight = 0;
+		int j = 0;
+		int smallIntIndex = 0;
+
+		for (int i = 1; i < playerList.size(); i++) {
+
+			smallHeight = playerList.get(i - 1).getHeightInInches();
+			smallIntIndex = i - 1;
+
+			for (j = i; j < playerList.size(); j++) {
+				if (playerList.get(j).getHeightInInches() < smallHeight) {
+					smallHeight = playerList.get(j).getHeightInInches();
+					smallIntIndex = j;
 				}
-				Player temp = playerList.get(i);
-				playerList.set(i, min);
-				playerList.set(j, temp);
 			}
+			Player temp = playerList.get(smallIntIndex);
+			playerList.set(smallIntIndex, playerList.get(i - 1));
+			playerList.set(i - 1, temp);
+		}
+		int counter = 1;
+		for (Player player : playerList) {
+			System.out.println(counter + ": " + player);
+			counter++;
 		}
 	}
-	
-	//This method gives a count, for each team, the amount of experienced and inexperienced players.
+
+	// This method gives a count, for each team, the amount of experienced and
+	// inexperienced players.
 	public void isExperienced() {
-		
+
 		for (Team team : mTeamList) {
 			List<Player> playerList = mTeamRoster.get(team);
 			int experiencedCount = 0;
 			int inexperiencedCount = 0;
-			
+
 			for (Player player : playerList) {
-				if(player.isPreviousExperience()) {
+				if (player.isPreviousExperience()) {
 					experiencedCount++;
-				}
-				else {
+				} else {
 					inexperiencedCount++;
 				}
 			}
-			
-			System.out.println("\n" + team + ":\nExperienced players: " + experiencedCount +
-								"\nInexperienced players: " + inexperiencedCount);
+
+			System.out.println("\n" + team + ":\nExperienced players: " + experiencedCount + "\nInexperienced players: "
+					+ inexperiencedCount);
 		}
-		
+
 	}
-	
+
 }
